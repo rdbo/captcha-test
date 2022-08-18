@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <script type="text/javascript" src="/jquery.js"></script>
+    </head>
+
+    <body>
+        <h1>Hello!</h1>
+        <p id="test">JQuery not loaded</p>
+        <br/>
+        <form id="myform" method="POST" action="submit">
+            <label for="name">Name: </label>
+            <input name="name" placeholder="Enter your name"/>
+            <br/>
+            <label for="email">E-Mail: </label>
+            <input name="email" placeholder="example@domain.com"/>
+            <br/>
+            <input id="captcha_id" name="captcha_id" value="" style="display: none;"/>
+            <label for="captcha_answer">Captcha Answer: </label>
+            <input name="captcha_answer"/>
+            <br/>
+            <input type="submit" value="Submit"/>
+            <br/>
+            <p id="info-text">Loading captcha...</p>
+        </form>
+        <script>
+            $("#test").html("JQuery loaded");
+            let captcha = $.getJSON("/api/captcha", function (data) {
+                let json = JSON.parse(data);
+                let myform = $("#myform");
+                $("#captcha_id").attr("value", json.id);
+                $("<img>").attr("src", "data:image/png;base64," + json.image).appendTo(myform);
+                $("#info-text").remove();
+            });
+        </script>
+    </body>
+</html>
